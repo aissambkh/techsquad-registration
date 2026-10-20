@@ -195,3 +195,29 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 
   targets.forEach(el => observer.observe(el));
 }
+// ── Automatically close the form once the deadline has passed ──
+(function closeIfExpired() {
+  if (Date.now() <= new Date(REGISTRATION_DEADLINE).getTime()) return;
+
+  const card = document.querySelector('.form-card');
+  if (card) {
+    card.innerHTML = `
+      <div class="success-state" style="display:block">
+        <div class="success-burst">CLOSED</div>
+        <h3 class="success-title">Registrations are closed</h3>
+        <p class="success-msg">
+          Thank you to everyone who joined the TechSquad family!
+          Follow <strong>@techsquadclub</strong> on Instagram to see what's coming next.
+        </p>
+      </div>`;
+  }
+
+  const label = document.querySelector('.countdown-label');
+  if (label) label.innerHTML = '<span class="pulse-dot"></span> Registrations are closed';
+
+  document.querySelectorAll('a[href="#register"]').forEach(a => {
+    a.textContent = 'Follow us on Instagram';
+    a.href = 'https://www.instagram.com/techsquadclub/';
+    a.target = '_blank';
+  });
+})();
